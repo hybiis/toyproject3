@@ -1,4 +1,4 @@
-package com.example.moduleclient.util;
+package com.example.modulecore.util;
 
 import org.springframework.http.HttpStatus;
 
