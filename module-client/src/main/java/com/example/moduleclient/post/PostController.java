@@ -3,6 +3,7 @@ package com.example.moduleclient.post;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,5 +36,12 @@ public class PostController {
 	public ResponseEntity<?> savePost(@RequestBody PostRequest.saveDto saveDto) {
 		PostResponse.SaveDto saveRespDto = postService.savePost(saveDto, 1L);
 		return ResponseEntity.ok().body(ApiUtil.success(saveRespDto));
+	}
+
+	@DeleteMapping("/board/delete")
+	@ResponseBody
+	public ResponseEntity<?> deletePost(@RequestParam Long id) {
+		PostResponse.DeleteDto deleteRespDto = postService.deletePost(id);
+		return ResponseEntity.ok().body(ApiUtil.success(deleteRespDto));
 	}
 }

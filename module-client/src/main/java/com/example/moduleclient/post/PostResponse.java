@@ -15,4 +15,17 @@ public class PostResponse {
 			this.content = post.getContent();
 		}
 	}
+
+	@Getter
+	public static class DeleteDto {
+		private Long id;
+		private String title;
+		private String content;
+
+		public DeleteDto(Post post) {
+			this.id = post.getId();
+			this.title = post.getTitle();
+			this.content = post.getContent();
+		}
+	}
 }

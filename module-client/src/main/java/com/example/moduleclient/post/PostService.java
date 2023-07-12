@@ -31,4 +31,13 @@ public class PostService {
 
 		return new PostResponse.SaveDto(post);
 	}
+
+	//@TODO: 본인 게시글인지 권한 체크 필요
+	public PostResponse.DeleteDto deletePost(Long id) {
+		Post post = postRepository.findById(id).orElseThrow();
+
+		postRepository.delete(post);
+
+		return new PostResponse.DeleteDto(post);
+	}
 }
