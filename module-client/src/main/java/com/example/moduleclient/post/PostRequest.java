@@ -29,4 +29,12 @@ public class PostRequest {
 				.build();
 		}
 	}
+
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class updateDto {
+		private String title;
+		private String content;
+	}
 }

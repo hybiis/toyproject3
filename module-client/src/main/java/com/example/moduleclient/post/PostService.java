@@ -40,4 +40,16 @@ public class PostService {
 
 		return new PostResponse.DeleteDto(post);
 	}
+
+	//@TODO: 본인 게시글인지 권한 체크 필요
+	public PostResponse.UpdateDto updatePost(PostRequest.updateDto updateReqDto, Long id) {
+		Post post = postRepository.findById(id).orElseThrow();
+
+		post.setTitle(updateReqDto.getTitle());
+		post.setContent(updateReqDto.getContent());
+
+		PostResponse.UpdateDto updateRespDto = new PostResponse.UpdateDto(postRepository.save(post));
+
+		return updateRespDto;
+	}
 }
