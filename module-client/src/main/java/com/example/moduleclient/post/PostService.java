@@ -52,4 +52,25 @@ public class PostService {
 
 		return updateRespDto;
 	}
+
+	public Page<PostPagesDto> searchByKeyword(int pageNo, int gubun, String keyword) {
+		Pageable pageable = PageRequest.of(pageNo, 6, Sort.by(Sort.Direction.DESC, "id"));
+		Page<PostPagesDto> postPagesRespDto = null;
+
+		switch (gubun) {
+			case 1:
+				postPagesRespDto = postRepository.findByNicknameContaining(keyword, pageable);
+				break;
+
+			case 2:
+				postPagesRespDto = postRepository.findByTitleContaining(keyword, pageable);
+				break;
+
+			case 3:
+				postPagesRespDto = postRepository.findByContentContaining(keyword, pageable);
+				break;
+		}
+
+		return postPagesRespDto;
+	}
 }

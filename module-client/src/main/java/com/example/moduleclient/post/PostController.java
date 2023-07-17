@@ -55,4 +55,10 @@ public class PostController {
 		return ResponseEntity.ok().body(ApiUtil.success(updateRespDto));
 	}
 
+	@GetMapping("/boards/search")
+	@ResponseBody
+	public ResponseEntity<?> searchPosts(@RequestParam int gubun, @RequestParam String keyword) {
+		Page<PostPagesDto> postPages = postService.searchByKeyword(0, gubun, keyword);
+		return ResponseEntity.ok().body(ApiUtil.success(postPages));
+	}
 }
