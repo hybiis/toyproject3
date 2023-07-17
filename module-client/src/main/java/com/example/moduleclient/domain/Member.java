@@ -1,4 +1,5 @@
 package com.example.moduleclient.domain;
+import com.example.moduleclient.dto.MemberJoinDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,5 +37,22 @@ public class Member {
     @Enumerated(EnumType.STRING)
     @Column(name = "member_role", nullable = false, length = 50)
     private MemberRole memberRole; //등급 권한
+
+    //회원정보 저장
+    public static Member createMember(MemberJoinDTO memberJoinDTO, PasswordEncoder passwordEncoder){
+        Member member = new Member();
+        member.setUsername(memberJoinDTO.getUsername());
+        member.setEmail(memberJoinDTO.getEmail());
+        member.setNickname(memberJoinDTO.getNickname());
+
+        if (memberJoinDTO.getPassword() != null) {
+            String password = passwordEncoder.encode(memberJoinDTO.getPassword());
+            member.setPassword(password);
+        }
+
+        member.setCreatedAt(LocalDateTime.now());
+        member.setMemberRole(MemberRole.새싹회원);
+        return member;
+    }
 
 }
