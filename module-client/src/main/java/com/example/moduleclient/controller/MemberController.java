@@ -2,17 +2,23 @@ package com.example.moduleclient.controller;
 
 import com.example.moduleclient.domain.Member;
 import com.example.moduleclient.dto.MemberJoinDTO;
+import com.example.moduleclient.repository.MemberRepository;
 import com.example.moduleclient.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
+
+@Validated
 @Controller
 @RequestMapping("/member")
 @Log4j2
@@ -48,17 +54,30 @@ public class MemberController {
 
     //회원가입 페이지
     @GetMapping("/join")
-    public void joinGET(){
+    public String joinGET(Model model){
 
         log.info("join get.................................");
+        model.addAttribute("memberJoinDTO", new MemberJoinDTO());
+        return "member/join";
+
     }
 
     @PostMapping("/join")
-    public String joinPOST(MemberJoinDTO memberJoinDTO){
+    public String joinPOST(@Valid MemberJoinDTO memberJoinDTO, BindingResult bindingResult, Model model){
 
         log.info("join post..............");
-        Member member =Member.createMember(memberJoinDTO,passwordEncoder);
-        memberService.saveMember(member);
+
+        if (bindingResult.hasErrors()) {
+            return "member/join";
+        }
+
+        try {
+            Member member = Member.createMember(memberJoinDTO, passwordEncoder);
+            memberService.saveMember(member);
+        } catch (IllegalStateException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/join";
+        }
 
         return "redirect:/member/login";
     }
