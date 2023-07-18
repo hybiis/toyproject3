@@ -1,8 +1,14 @@
 package com.example.moduleclient.post;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +29,20 @@ public class PostController {
 	private final PostService postService;
 
 	@GetMapping("/boards")
-	@ResponseBody
-	public Page<PostPagesDto> list(
-		@RequestParam(required = false, defaultValue = "0", value = "page") int pageNo) {
-		pageNo = pageNo == 0 ? 0 : pageNo - 1;
+	public String list(
+		@RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
+		@AuthenticationPrincipal UserDetails userDetails, Model model,
+		@PageableDefault(size = 6, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
-		Page<PostPagesDto> postPages = postService.list(pageNo, Category.DEFAULT);
-		return postPages;
+		Page<PostPagesDto> postPages = postService.list(pageNo, Category.GENERAL, pageable);
+		model.addAttribute("list", postPages);
+
+		return "board/list";
+	}
+
+	@GetMapping("/board/save")
+	public String saveForm() {
+		return "/board/save";
 	}
 
 	@PutMapping("/insert")

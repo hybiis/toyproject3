@@ -7,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.example.moduleclient.constant.Category;
 import com.example.moduleclient.constant.Status;
-import com.example.moduleclient.user.User;
+import com.example.moduleclient.member.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -54,8 +54,8 @@ public class Post {
 	private Status status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	@JoinColumn(name = "member_id")
+	private Member member;
 
 	@CreationTimestamp
 	@Column(nullable = false)

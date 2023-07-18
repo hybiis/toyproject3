@@ -2,7 +2,7 @@ package com.example.moduleclient.post;
 
 import com.example.moduleclient.constant.Category;
 import com.example.moduleclient.constant.Status;
-import com.example.moduleclient.user.User;
+import com.example.moduleclient.member.Member;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -26,14 +26,14 @@ public class PostRequest {
 		@NotBlank
 		private Category category;
 
-		public Post toEntity(User user) {
+		public Post toEntity(Member member) {
 			return Post.builder()
 				.title(title)
 				.content(content)
 				.thumbnail(thumbnail)
 				.category(category)
 				.status(Status.SHOW)
-				.user(user)
+				.member(member)
 				.build();
 		}
 	}
