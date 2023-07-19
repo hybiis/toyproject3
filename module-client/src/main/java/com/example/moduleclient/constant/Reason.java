@@ -5,13 +5,12 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Category {
-	GENERAL("새싹회원"),
-	BEST("우수회원");
+public enum Reason {
+	ABUSE("욕설"),
+	LEWDNESS("음란"),
+	CALUMNY("비방"),
+	ADVERTISEMENT("광고"),
+	ETC("기타");
 
 	private String name;
-
-	public Category findByName(String name) {
-		return Category.valueOf(name);
-	}
 }

@@ -35,6 +35,19 @@ subprojects {
 		annotationProcessor 'org.projectlombok:lombok'
 		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 		testImplementation 'org.springframework.security:spring-security-test'
+
+		//추가
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+		implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+		implementation 'javax.validation:validation-api:2.0.1.Final'
+		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+		testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
+		testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.28'
+
+		//화면구성을 위한 Thymeleaf 라이브러리 추가
+		implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 	}
 
 	tasks.named('test') {
