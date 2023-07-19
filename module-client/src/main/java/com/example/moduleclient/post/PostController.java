@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -77,12 +77,20 @@ public class PostController {
 		return "redirect:/boards";
 	}
 
-	@PostMapping("/boards/{id}/update")
-	@ResponseBody
-	public ResponseEntity<?> updatePost(@RequestBody PostRequest.updateDto updateReqDto, @PathVariable Long id) {
+	@GetMapping("/boards/{id}/edit")
+	public String updateForm(@PathVariable Long id, PostRequest.UpdateDto updateReqDto, Model model) {
+		updateReqDto = postService.findById(id);
+
+		model.addAttribute("updateReqDto", updateReqDto);
+
+		return "board/edit";
+	}
+
+	@PutMapping("/api/boards/{id}/update")
+	public String updatePost(@PathVariable Long id, PostRequest.UpdateDto updateReqDto) {
 		PostResponse.UpdateDto updateRespDto = postService.updatePost(updateReqDto, id);
 
-		return ResponseEntity.ok().body(ApiUtil.success(updateRespDto));
+		return "redirect:/boards/{id}";
 	}
 
 	@GetMapping("/boards/search")

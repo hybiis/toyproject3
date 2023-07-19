@@ -33,12 +33,10 @@ public class PostResponse {
 
 	@Getter
 	public static class UpdateDto {
-		private Long id;
 		private String title;
 		private String content;
 
 		public UpdateDto(Post post) {
-			this.id = post.getId();
 			this.title = post.getTitle();
 			this.content = post.getContent();
 		}

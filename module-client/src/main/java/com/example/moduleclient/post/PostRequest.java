@@ -43,12 +43,21 @@ public class PostRequest {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class updateDto {
+	public static class UpdateDto {
+		@NotBlank
+		private Long id;
+
 		@NotBlank
 		@Size(max = 30, message = "제목은 30자를 넘을 수 없습니다.")
 		private String title;
 		@NotBlank
 		@Size(max = 2000, message = "내용은 2000자를 넘을 수 없습니다.")
 		private String content;
+
+		public UpdateDto(Post post) {
+			this.id = post.getId();
+			this.title = post.getTitle();
+			this.content = post.getContent();
+		}
 	}
 }
