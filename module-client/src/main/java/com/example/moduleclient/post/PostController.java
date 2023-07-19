@@ -1,5 +1,7 @@
 package com.example.moduleclient.post;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.moduleclient.constant.Category;
+import com.example.moduleclient.reply.ReplyResponse;
+import com.example.moduleclient.reply.ReplyService;
 import com.example.modulecore.util.ApiUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostController {
 	private final PostService postService;
+	private final ReplyService replyService;
 
 	@GetMapping("/boards")
 	public String list(
@@ -38,6 +43,17 @@ public class PostController {
 		model.addAttribute("list", postPages);
 
 		return "board/list";
+	}
+
+	@GetMapping("/board/{id}")
+	public String detailForm(@PathVariable Long id, Model model) {
+		PostResponse.DetailsDto postDetailsDto = postService.findDetailsByPost(id);
+		List<ReplyResponse.DetailsDto> replyDeatilsDto = replyService.findReplyDetailsByPost(id);
+
+		model.addAttribute("post", postDetailsDto);
+		model.addAttribute("replies", replyDeatilsDto);
+
+		return "board/details";
 	}
 
 	@GetMapping("/board/save")

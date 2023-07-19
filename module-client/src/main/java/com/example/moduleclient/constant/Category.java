@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Category {
-	DEFAULT("새싹회원"),
-	FIRST("우수회원");
+	GENERAL("새싹회원"),
+	BEST("우수회원");
 
 	private String name;
 

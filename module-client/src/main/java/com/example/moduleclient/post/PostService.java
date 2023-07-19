@@ -25,6 +25,14 @@ public class PostService {
 		return postPagesRespDto;
 	}
 
+	public PostResponse.DetailsDto findDetailsByPost(Long postId) {
+		Post post = postRepository.findById(postId).orElseThrow();
+
+		PostResponse.DetailsDto detailsDto = new PostResponse.DetailsDto(post);
+
+		return detailsDto;
+	}
+
 	public PostResponse.SaveDto savePost(PostRequest.saveDto saveReqDto, Long userId) {
 		Member member = memberRepository.findById(userId).orElseThrow();
 		Post post = postRepository.save(saveReqDto.toEntity(member));
