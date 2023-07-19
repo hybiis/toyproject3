@@ -22,7 +22,7 @@ public class PostRequest {
 		@Size(max = 2000, message = "내용은 2000자를 넘을 수 없습니다.")
 		private String content;
 
-		private byte[] thumbnail;
+		private String thumbnail;
 		@NotBlank
 		private Category category;
 
