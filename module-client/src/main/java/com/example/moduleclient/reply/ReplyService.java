@@ -19,8 +19,8 @@ public class ReplyService {
 	private final MemberRepository userRepository;
 	private final PostRepository postRepository;
 
-	public ReplyResponse.SaveDto saveReply(ReplyRequest.saveDto saveReqDto, Long userId) {
-		Member member = userRepository.findById(userId).orElseThrow();
+	public ReplyResponse.SaveDto saveReply(ReplyRequest.saveDto saveReqDto, String username) {
+		Member member = userRepository.findByUsername(username);
 		Post post = postRepository.findById(saveReqDto.getPostId()).orElseThrow();
 
 		Reply reply = replyRepository.save(saveReqDto.toEntity(post, member));
