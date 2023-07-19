@@ -71,10 +71,10 @@ public class PostController {
 	}
 
 	@DeleteMapping("/boards/{id}/delete")
-	@ResponseBody
-	public ResponseEntity<?> deletePost(@PathVariable Long id) {
+	public String deletePost(@PathVariable Long id) {
 		PostResponse.DeleteDto deleteRespDto = postService.deletePost(id);
-		return ResponseEntity.ok().body(ApiUtil.success(deleteRespDto));
+
+		return "redirect:/boards";
 	}
 
 	@PostMapping("/boards/{id}/update")
