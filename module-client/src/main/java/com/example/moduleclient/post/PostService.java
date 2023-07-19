@@ -33,8 +33,8 @@ public class PostService {
 		return detailsDto;
 	}
 
-	public PostResponse.SaveDto savePost(PostRequest.saveDto saveReqDto, Long userId) {
-		Member member = memberRepository.findById(userId).orElseThrow();
+	public PostResponse.SaveDto savePost(PostRequest.saveDto saveReqDto, String username) {
+		Member member = memberRepository.findByUsername(username);
 		Post post = postRepository.save(saveReqDto.toEntity(member));
 
 		return new PostResponse.SaveDto(post);

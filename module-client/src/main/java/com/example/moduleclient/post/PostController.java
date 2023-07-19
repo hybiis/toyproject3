@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,7 +44,7 @@ public class PostController {
 		return "board/list";
 	}
 
-	@GetMapping("/board/{id}")
+	@GetMapping("/boards/{id}")
 	public String detailForm(@PathVariable Long id, Model model) {
 		PostResponse.DetailsDto postDetailsDto = postService.findDetailsByPost(id);
 		List<ReplyResponse.DetailsDto> replyDeatilsDto = replyService.findReplyDetailsByPost(id);
@@ -57,16 +56,18 @@ public class PostController {
 	}
 
 	@GetMapping("/board/save")
-	public String saveForm() {
+	public String saveForm(Model model, PostRequest.saveDto saveReqDto) {
+
+		model.addAttribute("categories", Category.values());
+		model.addAttribute("saveReqDto", saveReqDto);
 		return "/board/save";
 	}
 
-	@PutMapping("/insert")
-	@ResponseBody
-	//@TODO: UserDetails 가져오기
-	public ResponseEntity<?> savePost(@RequestBody PostRequest.saveDto saveDto) {
-		PostResponse.SaveDto saveRespDto = postService.savePost(saveDto, 1L);
-		return ResponseEntity.ok().body(ApiUtil.success(saveRespDto));
+	@PostMapping("/api/board/save")
+	public String savePost(PostRequest.saveDto saveReqDto,
+		@AuthenticationPrincipal UserDetails userDetails) {
+		PostResponse.SaveDto saveRespDto = postService.savePost(saveReqDto, userDetails.getUsername());
+		return "redirect:/boards/" + saveRespDto.getId();
 	}
 
 	@DeleteMapping("/boards/{id}/delete")
