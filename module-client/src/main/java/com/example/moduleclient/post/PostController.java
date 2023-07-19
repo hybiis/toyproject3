@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,12 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.moduleclient.constant.Category;
+import com.example.moduleclient.constant.SearchType;
 import com.example.moduleclient.reply.ReplyResponse;
 import com.example.moduleclient.reply.ReplyService;
-import com.example.modulecore.util.ApiUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,11 +33,22 @@ public class PostController {
 	@GetMapping("/boards")
 	public String list(
 		@RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
+		@RequestParam(defaultValue = "GENERAL") Category category,
+		@RequestParam(required = false, name = "type") SearchType searchType,
+		@RequestParam(required = false) String keyword,
 		@AuthenticationPrincipal UserDetails userDetails, Model model,
 		@PageableDefault(size = 6, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
-		Page<PostPagesDto> postPages = postService.list(pageNo, Category.GENERAL, pageable);
+		Page<PostPagesDto> postPages = null;
+		if (keyword == null) {
+			postPages = postService.list(pageNo, category, pageable);
+		} else {
+			postPages = postService.searchPosts(pageNo, searchType, keyword, category, pageable);
+		}
+
 		model.addAttribute("list", postPages);
+		model.addAttribute("searchType", SearchType.values());
+		model.addAttribute("categories", Category.values());
 
 		return "board/list";
 	}
@@ -91,12 +100,5 @@ public class PostController {
 		PostResponse.UpdateDto updateRespDto = postService.updatePost(updateReqDto, id);
 
 		return "redirect:/boards/{id}";
-	}
-
-	@GetMapping("/boards/search")
-	@ResponseBody
-	public ResponseEntity<?> searchPosts(@RequestParam int gubun, @RequestParam String keyword) {
-		Page<PostPagesDto> postPages = postService.searchByKeyword(0, gubun, keyword);
-		return ResponseEntity.ok().body(ApiUtil.success(postPages));
 	}
 }

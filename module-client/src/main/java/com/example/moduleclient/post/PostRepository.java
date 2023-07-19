@@ -14,14 +14,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	Page<PostPagesDto> findByCategory(@Param("category") Category category, Pageable pageable);
 
 	@Query("SELECT new com.example.moduleclient.post.PostPagesDto(p.id, p.title, u.nickname, p.createdAt)"
-		+ " FROM Post p JOIN p.member u WHERE u.nickname LIKE %:keyword%")
-	Page<PostPagesDto> findByNicknameContaining(@Param("keyword") String keyword, Pageable pageable);
+		+ " FROM Post p JOIN p.member u WHERE p.category = :category AND u.nickname LIKE %:keyword%")
+	Page<PostPagesDto> findByNicknameContaining(@Param("keyword") String keyword, @Param("category") Category category,
+		Pageable pageable);
 
 	@Query("SELECT new com.example.moduleclient.post.PostPagesDto(p.id, p.title, u.nickname, p.createdAt)"
-		+ " FROM Post p JOIN p.member u WHERE p.title LIKE %:keyword%")
-	Page<PostPagesDto> findByTitleContaining(@Param("keyword") String keyword, Pageable pageable);
+		+ " FROM Post p JOIN p.member u WHERE p.category = :category AND p.title LIKE %:keyword%")
+	Page<PostPagesDto> findByTitleContaining(@Param("keyword") String keyword, @Param("category") Category category,
+		Pageable pageable);
 
 	@Query("SELECT new com.example.moduleclient.post.PostPagesDto(p.id, p.title, u.nickname, p.createdAt)"
-		+ " FROM Post p JOIN p.member u WHERE p.content LIKE %:keyword%")
-	Page<PostPagesDto> findByContentContaining(@Param("keyword") String keyword, Pageable pageable);
+		+ " FROM Post p JOIN p.member u WHERE p.category = :category AND p.content LIKE %:keyword%")
+	Page<PostPagesDto> findByContentContaining(@Param("keyword") String keyword, @Param("category") Category category,
+		Pageable pageable);
 }
