@@ -1,7 +1,7 @@
 package com.example.moduleclient.reply;
 
+import com.example.moduleclient.member.Member;
 import com.example.moduleclient.post.Post;
-import com.example.moduleclient.user.User;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -23,13 +23,13 @@ public class ReplyRequest {
 		@NotBlank
 		private Long postId;
 
-		public Reply toEntity(Post post, User user) {
+		public Reply toEntity(Post post, Member member) {
 			return Reply.builder()
 				.comment(comment)
 				.parentId(parentId)
 				.step(step)
 				.post(post)
-				.user(user)
+				.member(member)
 				.build();
 		}
 	}
