@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.moduleclient.dto.MemberJoinDTO;
+import com.example.moduleclient.constant.MemberRole;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +26,7 @@ import lombok.ToString;
 public class Member {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int mid;
 
 	@Column(nullable = false, unique = true, length = 50)
