@@ -1,5 +1,7 @@
 package com.example.moduleclient.post;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.moduleclient.constant.Category;
 import com.example.moduleclient.constant.Status;
 import com.example.moduleclient.member.Member;
@@ -26,6 +28,8 @@ public class PostRequest {
 		private String content;
 
 		private String thumbnail;
+		private MultipartFile thumbnailImage;
+
 		@NotNull
 		private Category category;
 
