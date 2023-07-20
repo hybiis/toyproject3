@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -29,11 +30,12 @@ public class PostController {
 	private final PostService postService;
 	private final ReplyService replyService;
 
+	@PreAuthorize("hasAuthority(T(java.util.Objects).requireNonNullElse(#category, 'GENERAL'))")
 	@GetMapping({"/boards", "/"})
 	public String list(
 		@RequestParam(required = false, defaultValue = "0", value = "page") int pageNo,
-		@RequestParam(defaultValue = "GENERAL")
-		Category category, @RequestParam(required = false, name = "type") SearchType searchType,
+		@RequestParam(defaultValue = "GENERAL") Category category,
+		@RequestParam(required = false, name = "type") SearchType searchType,
 		@RequestParam(required = false) String keyword, Model model, Pageable pageable) {
 
 		pageNo = pageNo == 0 ? 0 : pageNo - 1;

@@ -1,11 +1,17 @@
 package com.example.moduleclient.member;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.example.moduleclient.constant.Category;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -43,10 +49,15 @@ public class MemberService implements UserDetailsService {
 			throw new UsernameNotFoundException(username);
 		}
 
+		List<Category> categories = Category.findByMemberRole(member.getMemberRole());
+		List<SimpleGrantedAuthority> authorities = categories.stream()
+			.map(category -> new SimpleGrantedAuthority(category.toString()))
+			.collect(Collectors.toList());
+
 		return User.builder()
 			.username(member.getEmail())
 			.password(member.getPassword())
-			.roles(member.getMemberRole().toString())
+			.authorities(authorities)
 			.build();
 	}
 }
