@@ -9,10 +9,10 @@ spring:
     url: jdbc:mysql://localhost:3306/board
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: root
+    password: root1234
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -22,5 +22,5 @@ spring:
 
 logging:
   level:
-    '[shop.mtcoding.servicebank]': DEBUG
+    '[com.example.moduleclient]': DEBUG
     '[org.hibernate.type]': TRACE
