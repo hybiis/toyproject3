@@ -9,13 +9,13 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ImageUpload {
-	private static final String rootPath = System.getProperty("user.dir");
+	private static final String rootPath = System.getProperty("user.dir") + "/module-client/src/main/resources/static/";
 
 	public static String upload(MultipartFile originImage, String directory) {
 		String uploadImageName = UUID.randomUUID().toString() + "_" + originImage.getOriginalFilename();
-		String uploadImagePath = rootPath + File.separator + directory + File.separator;
+		String uploadImagePath = directory + File.separator;
 
-		Path uploadPath = Paths.get(uploadImagePath + uploadImageName);
+		Path uploadPath = Paths.get(rootPath.replace("/", File.separator) + uploadImagePath + uploadImageName);
 
 		try {
 			originImage.transferTo(uploadPath.toFile());

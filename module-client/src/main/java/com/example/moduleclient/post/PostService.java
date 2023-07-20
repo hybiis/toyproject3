@@ -1,7 +1,9 @@
 package com.example.moduleclient.post;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +24,8 @@ public class PostService {
 	private final EntityManager entityManager;
 
 	public Page<PostPagesDto> list(int pageNo, Category category, Pageable pageable) {
-		pageNo = pageNo == 0 ? 0 : pageNo - 1;
+		pageable = PageRequest.of(pageNo, 6, Sort.by("id").descending());
+
 		Page<PostPagesDto> postPagesRespDto = postRepository.findByCategory(category, pageable);
 
 		return postPagesRespDto;
@@ -30,8 +33,8 @@ public class PostService {
 
 	public Page<PostPagesDto> searchPosts(int pageNo, SearchType searchType, String keyword, Category category,
 		Pageable pageable) {
-		pageNo = pageNo == 0 ? 0 : pageNo - 1;
 
+		pageable = PageRequest.of(pageNo, 6, Sort.by("id").descending());
 		Page<PostPagesDto> postPagesRespDto = null;
 
 		if (searchType == SearchType.T) {
