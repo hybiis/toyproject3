@@ -40,3 +40,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+
+### 썸네일 이미지 ###
+**/main/resources/static/thumbnails/
