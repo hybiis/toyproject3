@@ -1,4 +1,4 @@
-package com.example.moduleclient.member;
+package com.example.moduleclient.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
