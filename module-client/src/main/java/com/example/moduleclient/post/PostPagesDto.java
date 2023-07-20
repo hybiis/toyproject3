@@ -14,6 +14,8 @@ import lombok.Setter;
 public class PostPagesDto {
 	private Long id;
 	private String title;
+	private String content;
+	private String thumbnail;
 	private String nickname;
 	private LocalDateTime createdAt;
 }
