@@ -5,10 +5,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.moduleclient.constant.Category;
+import com.example.moduleclient.constant.ErrorCode;
 import com.example.moduleclient.constant.SearchType;
+import com.example.moduleclient.exception.CustomException;
 import com.example.moduleclient.member.Member;
 import com.example.moduleclient.member.MemberRepository;
 import com.example.modulecore.image.ImageUpload;
@@ -49,15 +52,17 @@ public class PostService {
 	}
 
 	public PostResponse.DetailsDto findDetailsByPost(Long postId) {
-		Post post = postRepository.findById(postId).orElseThrow();
+		Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
 		PostResponse.DetailsDto detailsDto = new PostResponse.DetailsDto(post);
 
 		return detailsDto;
 	}
 
+	@Transactional
 	public PostResponse.SaveDto savePost(PostRequest.saveDto saveReqDto, String username) {
-		Member member = memberRepository.findByUsername(username);
+		Member member = memberRepository.findByUsername(username)
+			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
 		String uploadThumbnail = getUploadThumbnail(saveReqDto.getThumbnailImage());
 		saveReqDto.setThumbnail(uploadThumbnail);
@@ -68,8 +73,9 @@ public class PostService {
 	}
 
 	//@TODO: 본인 게시글인지 권한 체크 필요
+	@Transactional
 	public PostResponse.DeleteDto deletePost(Long id) {
-		Post post = postRepository.findById(id).orElseThrow();
+		Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
 		postRepository.delete(post);
 
@@ -77,8 +83,13 @@ public class PostService {
 	}
 
 	//@TODO: 본인 게시글인지 권한 체크 필요
+	@Transactional
 	public PostResponse.UpdateDto updatePost(PostRequest.UpdateDto updateReqDto, Long id) {
 		Post post = entityManager.find(Post.class, id);
+
+		if (post == null)
+			throw new CustomException(ErrorCode.POST_NOT_FOUND);
+
 		post.setTitle(updateReqDto.getTitle());
 		post.setContent(updateReqDto.getContent());
 
@@ -88,7 +99,7 @@ public class PostService {
 	}
 
 	public PostRequest.UpdateDto findById(Long id) {
-		Post post = postRepository.findById(id).orElseThrow();
+		Post post = postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
 		return new PostRequest.UpdateDto(post);
 	}
