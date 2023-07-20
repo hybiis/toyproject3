@@ -19,4 +19,4 @@ spring:
 
 logging:
   level:
-    '[shop.mtcoding.servicebank]': DEBUG
+    '[com.example.moduleclient]': DEBUG

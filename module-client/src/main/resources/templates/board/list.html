@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<div layout:fragment="content">
+
+  <div class="row mt-3" style="padding-bottom: 2%;">
+    <form action="/boards" method="get">
+      <div class="col">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <select class="form-select" aria-label="Select Category" name="category" onchange="this.form.submit()">
+              <option th:each="category: ${categories}" th:value="${category}" th:text="${category.getName()}"
+                      th:selected="${param.category} == ${category}"></option>
+            </select>
+          </div>
+          <div class="input-group-prepend">
+            <select class="form-select" aria-label="Select Search Type" name="type">
+              <option th:each="type: ${searchType}" th:value="${type}" th:text="${type.getName()}"
+                      th:selected="${param.type == type}"></option>
+            </select>
+          </div>
+          <input type="text" class="form-control" name="keyword" th:value="${param.keyword}">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary searchBtn" type="submit">검색</button>
+            <a href="/boards" role="button" class="btn btn-secondary">초기화</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-3 g-6">
+    <div th:each="board: ${list}" class="col" style="padding-bottom: 3%;">
+      <div th:onclick="|location.href='@{/boards/{id} (id=${board.id})}'|" class="card"
+           style="width: 18rem; cursor: pointer">
+        <svg th:if="${board.thumbnail == null}" class="bd-placeholder-img card-img-top" width="100%" height="180"
+             xmlns="http://www.w3.org/2000/svg"
+             role="img"
+             aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <title>Placeholder</title>
+          <rect width="100%" height="100%" fill="#868e96"></rect>
+          <text x="50%" y="50%" fill="#dee2e6">No Image</text>
+        </svg>
+        <img th:unless="${board.thumbnail == null}" th:src="${board.thumbnail}" class="card-img-top" width="100%"
+             height="180">
+        <div class="card-body">
+          <h5 class="card-title" th:text="${board.title}"></h5>
+          <p class="d-inline-block text-truncate" style="max-width: 100%;" th:text="${board.content}"></p>
+          <p class="card-text" th:text="${board.nickname}"></p>
+        </div>
+        <div class="card-footer text-end">
+          <small class="text-muted" th:text="${board.createdAt}"></small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding-top: 3%;">
+    <a href="/board/save" role="button" class="btn btn-primary">글쓰기</a>
+  </div>
+  <div style="padding-top: 1%">
+    <nav aria-label="Page navigation example ">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" th:href="@{/boards}" aria-label="First">
+            <span aria-hidden="true">처음</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" th:href="@{/boards?page={page} (page = ${list.number})}" aria-label="Previous">
+            <span aria-hidden="true">이전</span>
+          </a>
+        </li>
+        <th:block th:with="start=${T(java.lang.Math).floor(list.number/6)*6 + 1},
+                    end=(${start + 5 < list.totalPages ? start + 5 : list.totalPages})">
+          <li class="page-item"
+              th:with="start=${T(java.lang.Math).floor(list.number/6)*6 + 1},
+                    end=(${start + 5 < list.totalPages ? start + 5 : list.totalPages})"
+              th:each="pageButton : ${#numbers.sequence(start, end)}">
+            <a class="page-link" th:href="@{/boards?page={page} (page = ${pageButton})}"
+               th:text="${pageButton}"></a>
+          </li>
+        </th:block>
+        <li class="page-item">
+          <a class="page-link"
+             th:href="@{/boards?page={page} (page = (${T(java.lang.Math).floor(list.number/6)*6 + 1 + 5 < list.totalPages ? T(java.lang.Math).floor(list.number/6)*6 + 1 + 5 : list.totalPages}) + 1)}"
+             aria-label="Next">
+            <span aria-hidden="true">다음</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" th:href="@{/boards?page={page} (page = ${list.totalPages})}" aria-label="End">
+            <span aria-hidden="true">끝</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
