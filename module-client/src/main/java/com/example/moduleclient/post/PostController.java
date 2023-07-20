@@ -22,6 +22,7 @@ import com.example.moduleclient.constant.SearchType;
 import com.example.moduleclient.reply.ReplyResponse;
 import com.example.moduleclient.reply.ReplyService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -73,7 +74,7 @@ public class PostController {
 	}
 
 	@PostMapping("/api/board/save")
-	public String savePost(PostRequest.saveDto saveReqDto,
+	public String savePost(@Valid PostRequest.saveDto saveReqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		PostResponse.SaveDto saveRespDto = postService.savePost(saveReqDto, userDetails.getUsername());
 		return "redirect:/boards/" + saveRespDto.getId();
@@ -96,7 +97,7 @@ public class PostController {
 	}
 
 	@PutMapping("/api/boards/{id}/update")
-	public String updatePost(@PathVariable Long id, PostRequest.UpdateDto updateReqDto) {
+	public String updatePost(@PathVariable Long id, @Valid PostRequest.UpdateDto updateReqDto) {
 		PostResponse.UpdateDto updateRespDto = postService.updatePost(updateReqDto, id);
 
 		return "redirect:/boards/{id}";
