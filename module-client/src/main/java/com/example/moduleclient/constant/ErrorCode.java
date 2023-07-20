@@ -1,0 +1,20 @@
+package com.example.moduleclient.constant;
+
+import org.springframework.http.HttpStatus;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum ErrorCode {
+	BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+	POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."),
+	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 정보가 없습니다. 로그인 후 다시 시도해주세요."),
+	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 메서드입니다."),
+	FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 있는 권한이 없습니다."),
+	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "응답이 없습니다. 잠시 후 다시 시도해주세요.");
+
+	private HttpStatus status;
+	private String message;
+}
