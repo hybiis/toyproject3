@@ -13,7 +13,8 @@ public enum ErrorCode {
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자 정보가 없습니다. 로그인 후 다시 시도해주세요."),
 	METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "허용되지 않은 메서드입니다."),
 	FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 있는 권한이 없습니다."),
-	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "응답이 없습니다. 잠시 후 다시 시도해주세요.");
+	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "응답이 없습니다. 잠시 후 다시 시도해주세요."),
+	MEMBER_USERNAME_DUPLICATED(HttpStatus.BAD_REQUEST, "중복되는 ID 입니다.");
 
 	private HttpStatus status;
 	private String message;
