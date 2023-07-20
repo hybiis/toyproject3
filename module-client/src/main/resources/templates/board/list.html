@@ -12,13 +12,13 @@
           <div class="input-group-prepend">
             <select class="form-select" aria-label="Select Category" name="category" onchange="this.form.submit()">
               <option th:each="category: ${categories}" th:value="${category}" th:text="${category.getName()}"
-                      th:selected="${param.category} == ${category}"></option>
+                      th:selected="${category.toString()} == ${#strings.toString(param.category)}"></option>
             </select>
           </div>
           <div class="input-group-prepend">
             <select class="form-select" aria-label="Select Search Type" name="type">
               <option th:each="type: ${searchType}" th:value="${type}" th:text="${type.getName()}"
-                      th:selected="${param.type == type}"></option>
+                      th:selected="${type.toString()} == ${#strings.toString(param.type)}"></option>
             </select>
           </div>
           <input type="text" class="form-control" name="keyword" th:value="${param.keyword}">
