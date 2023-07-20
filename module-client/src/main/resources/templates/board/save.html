@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +10,7 @@
 </head>
 <body>
 <h1>게시글 등록</h1>
-<form th:object="${saveReqDto}" action="/api/board/save" method="post">
+<form th:object="${saveReqDto}" action="/api/board/save" method="post" enctype="multipart/form-data">
   <div class="mb-3">
     <label for="category" class="form-label">카테고리</label>
     <select class="form-select" aria-label="Default select example" id="category" th:field="*{category}">
@@ -28,11 +27,18 @@
   </div>
   <div class="mb-3">
     <label for="thumbnail" class="form-label">썸네일</label>
-    <input class="form-control" type="file" id="thumbnail" th:field="*{thumbnail}">
+    <input class="form-control" type="file" accept="image/*" id="thumbnail" th:field="*{thumbnailImage}">
   </div>
   <a href="/" role="button" class="btn btn-secondary">취소</a>
   <button type="submit" class="btn btn-primary" id="btn-save">등록</button>
 </form>
-
 </body>
+
+<script>
+    $(document).ready(function () {
+        $('#thumbnail').on('change', function () {
+            $('#thumbnail-label').text($(this).val());
+        });
+    });
+</script>
 </html>

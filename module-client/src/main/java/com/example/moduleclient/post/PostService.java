@@ -1,13 +1,17 @@
 package com.example.moduleclient.post;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.moduleclient.constant.Category;
 import com.example.moduleclient.constant.SearchType;
 import com.example.moduleclient.member.Member;
 import com.example.moduleclient.member.MemberRepository;
+import com.example.modulecore.image.ImageUpload;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +24,8 @@ public class PostService {
 	private final EntityManager entityManager;
 
 	public Page<PostPagesDto> list(int pageNo, Category category, Pageable pageable) {
-		pageNo = pageNo == 0 ? 0 : pageNo - 1;
+		pageable = PageRequest.of(pageNo, 6, Sort.by("id").descending());
+
 		Page<PostPagesDto> postPagesRespDto = postRepository.findByCategory(category, pageable);
 
 		return postPagesRespDto;
@@ -28,8 +33,8 @@ public class PostService {
 
 	public Page<PostPagesDto> searchPosts(int pageNo, SearchType searchType, String keyword, Category category,
 		Pageable pageable) {
-		pageNo = pageNo == 0 ? 0 : pageNo - 1;
 
+		pageable = PageRequest.of(pageNo, 6, Sort.by("id").descending());
 		Page<PostPagesDto> postPagesRespDto = null;
 
 		if (searchType == SearchType.T) {
@@ -53,6 +58,10 @@ public class PostService {
 
 	public PostResponse.SaveDto savePost(PostRequest.saveDto saveReqDto, String username) {
 		Member member = memberRepository.findByUsername(username);
+
+		String uploadThumbnail = getUploadThumbnail(saveReqDto.getThumbnailImage());
+		saveReqDto.setThumbnail(uploadThumbnail);
+
 		Post post = postRepository.save(saveReqDto.toEntity(member));
 
 		return new PostResponse.SaveDto(post);
@@ -82,5 +91,12 @@ public class PostService {
 		Post post = postRepository.findById(id).orElseThrow();
 
 		return new PostRequest.UpdateDto(post);
+	}
+
+	private String getUploadThumbnail(MultipartFile originThumbnail) {
+		if (originThumbnail == null)
+			return null;
+
+		return ImageUpload.upload(originThumbnail, "thumbnails");
 	}
 }
