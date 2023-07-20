@@ -72,6 +72,7 @@ public class PostController {
 		return "/board/save";
 	}
 
+	@PreAuthorize("hasAuthority(T(java.util.Objects).requireNonNullElse(#saveReqDto.category, 'GENERAL'))")
 	@PostMapping("/api/board/save")
 	public String savePost(@Valid PostRequest.saveDto saveReqDto,
 		@AuthenticationPrincipal UserDetails userDetails) {
@@ -95,6 +96,7 @@ public class PostController {
 		return "board/edit";
 	}
 
+	@PreAuthorize("hasAuthority(T(java.util.Objects).requireNonNullElse(#updateReqDto.category, 'GENERAL'))")
 	@PutMapping("/api/boards/{id}/update")
 	public String updatePost(@PathVariable Long id, @Valid PostRequest.UpdateDto updateReqDto) {
 		PostResponse.UpdateDto updateRespDto = postService.updatePost(updateReqDto, id);
