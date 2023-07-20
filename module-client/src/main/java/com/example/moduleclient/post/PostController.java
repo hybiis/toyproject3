@@ -95,7 +95,7 @@ public class PostController {
 
 		return "board/edit";
 	}
-
+	
 	@PreAuthorize("hasAuthority(T(java.util.Objects).requireNonNullElse(#updateReqDto.category, 'GENERAL'))")
 	@PutMapping("/api/boards/{id}/update")
 	public String updatePost(@PathVariable Long id, @Valid PostRequest.UpdateDto updateReqDto) {
