@@ -5,6 +5,7 @@ import com.example.moduleclient.constant.Status;
 import com.example.moduleclient.member.Member;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +26,7 @@ public class PostRequest {
 		private String content;
 
 		private String thumbnail;
-		@NotBlank
+		@NotNull
 		private Category category;
 
 		public Post toEntity(Member member) {

@@ -1,12 +1,11 @@
 package com.example.moduleclient.post;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.moduleclient.constant.Category;
+import com.example.moduleclient.constant.SearchType;
 import com.example.moduleclient.member.Member;
 import com.example.moduleclient.member.MemberRepository;
 
@@ -23,6 +22,23 @@ public class PostService {
 	public Page<PostPagesDto> list(int pageNo, Category category, Pageable pageable) {
 		pageNo = pageNo == 0 ? 0 : pageNo - 1;
 		Page<PostPagesDto> postPagesRespDto = postRepository.findByCategory(category, pageable);
+
+		return postPagesRespDto;
+	}
+
+	public Page<PostPagesDto> searchPosts(int pageNo, SearchType searchType, String keyword, Category category,
+		Pageable pageable) {
+		pageNo = pageNo == 0 ? 0 : pageNo - 1;
+
+		Page<PostPagesDto> postPagesRespDto = null;
+
+		if (searchType == SearchType.T) {
+			postPagesRespDto = postRepository.findByTitleContaining(keyword, category, pageable);
+		} else if (searchType == SearchType.C) {
+			postPagesRespDto = postRepository.findByContentContaining(keyword, category, pageable);
+		} else if (searchType == SearchType.N) {
+			postPagesRespDto = postRepository.findByNicknameContaining(keyword, category, pageable);
+		}
 
 		return postPagesRespDto;
 	}
@@ -60,27 +76,6 @@ public class PostService {
 		PostResponse.UpdateDto updateRespDto = new PostResponse.UpdateDto(post);
 
 		return updateRespDto;
-	}
-
-	public Page<PostPagesDto> searchByKeyword(int pageNo, int gubun, String keyword) {
-		Pageable pageable = PageRequest.of(pageNo, 6, Sort.by(Sort.Direction.DESC, "id"));
-		Page<PostPagesDto> postPagesRespDto = null;
-
-		switch (gubun) {
-			case 1:
-				postPagesRespDto = postRepository.findByNicknameContaining(keyword, pageable);
-				break;
-
-			case 2:
-				postPagesRespDto = postRepository.findByTitleContaining(keyword, pageable);
-				break;
-
-			case 3:
-				postPagesRespDto = postRepository.findByContentContaining(keyword, pageable);
-				break;
-		}
-
-		return postPagesRespDto;
 	}
 
 	public PostRequest.UpdateDto findById(Long id) {
